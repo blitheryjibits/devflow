@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "@/context/theme-provider";
+import Navbar from "@/components/navigation/navbar/index";
+import { cn } from "@/lib/utils";
+
+const playfairDisplayHeading = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" });
+
+const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
 const spaceGrotesk = localFont({
   src: "./fonts/SpaceGroteskVF.ttf",
@@ -42,9 +49,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.className} ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={cn(
+        "h-full",
+        "antialiased",
+        inter.className,
+        spaceGrotesk.variable,
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        notoSans.variable,
+        playfairDisplayHeading.variable
+      )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <Navbar />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
