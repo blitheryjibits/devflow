@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from "next/font/google
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const playfairDisplayHeading = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" });
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -65,6 +66,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

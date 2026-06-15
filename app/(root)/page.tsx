@@ -1,35 +1,23 @@
-"use client";
-
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-
+import { auth, signOut } from "@/auth";
+import ROUTES from "@/constants/route";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const Theme = () => {
-  const { setTheme } = useTheme();
-
+const Home = async () => {
+  const session = await auth();
+  console.log(session);
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <h1>Welcome to the root home page</h1>
+      <form
+        action={async () => {
+          "use server";
+          await signOut({ redirectTo: ROUTES.SIGN_IN });
+        }}
+        className="px-10 pt-25"
+      >
+        <Button className="rounded-sm">Logout</Button>
+      </form>
+    </>
   );
 };
 
-export default Theme;
+export default Home;
