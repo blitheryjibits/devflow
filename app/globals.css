@@ -10,6 +10,8 @@
   --font-inter: var(--font-inter);
   --font-geist-mono: var(--font-geist-mono);
   --font-space-grotesk: var(--font-space-grotesk);
+  --font-noto--sans: var(--font-sans);
+  --font-playfair: var(--font-heading);
   --color-primary-100: #fff1e6;
   --color-primary-500: #ff7000;
 
@@ -48,9 +50,6 @@
   --background-image-auth-light: url("/images/auth-light.png");
 
   --breakpoint-xs: 420px;
-
-  --font-inter: var(--font-inter);
-  --font-space-grotesk: var(--font-space-grotesk);
 }
 
 /*
@@ -196,10 +195,6 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-}
-
-body {
-  font-family: "Inter", sans-serif;
 }
 
 @layer utilities {

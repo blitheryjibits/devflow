@@ -57,7 +57,6 @@ export default async function RootLayout({
         spaceGrotesk.variable,
         geistSans.variable,
         geistMono.variable,
-        "font-sans",
         notoSans.variable,
         playfairDisplayHeading.variable
       )}
