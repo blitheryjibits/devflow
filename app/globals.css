@@ -474,7 +474,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
