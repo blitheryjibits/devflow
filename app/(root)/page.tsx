@@ -1,8 +1,33 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ROUTES from "@/constants/route";
+import LocalSearch from "@/components/search/LocalSearch";
 
-const Home = async () => {
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+const questions = [
+  {
+    _id: 1,
+    title: "how to build in react",
+    tags: [
+      { _id: 1, name: "React" },
+      { _id: 2, name: "Javascript" },
+    ],
+  },
+  {
+    _id: 2,
+    title: "how to build in javascript",
+    tags: [{ _id: 1, name: "Javascript" }],
+  },
+];
+
+const Home = async ({ searchParams }: SearchParams) => {
+  const { query = "" } = await searchParams;
+
+  const filteredQuestions = questions.filter((question) => question.title.toLowerCase().includes(query?.toLowerCase()));
+
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -11,13 +36,14 @@ const Home = async () => {
           <Link href={ROUTES.ASK_QUESTION}>ask a question</Link>
         </Button>
       </section>
-      <section className="mt-11">local search</section>
-      HomeFilter
+      <section className="mt-11">
+        <LocalSearch imgSrc="/icons/search.svg" placeholder="Search Questions" otherClasses="flex-1" route="/" />
+      </section>
+
       <div className="mt-10 flex w-full flex-col gap-6">
-        <p>Question card 1</p>
-        <p>Question card 2</p>
-        <p>Question card 3</p>
-        <p>Question card 4</p>
+        {filteredQuestions.map((question) => (
+          <h1 key={question._id}>{question.title}</h1>
+        ))}
       </div>
     </>
   );
