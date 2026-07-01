@@ -3,6 +3,7 @@ import Link from "next/link";
 import ROUTES from "@/constants/route";
 import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilter from "@/components/filters/HomeFilter";
+import QuestionCard from "@/components/cards/QuestionCard";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -10,14 +11,37 @@ interface SearchParams {
 
 const questions = [
   {
-    _id: 1,
+    _id: "1",
     title: "how to build in react",
-    tags: [{ _id: 1, name: "React" }],
+    tags: [{ _id: "1", name: "React" }],
+    author: { _id: "1", name: "John Doe", image: "/icons/avatar.svg" },
+    createdAt: new Date("2023-06-01T10:00:00Z"),
+    upvotes: 10,
+    answers: 5,
+    views: 100,
   },
   {
-    _id: 2,
+    _id: "2",
     title: "how to build in javascript",
-    tags: [{ _id: 1, name: "Javascript" }],
+    tags: [{ _id: "2", name: "Javascript" }],
+    author: { _id: "2", name: "John Doe", image: "/icons/avatar.svg" },
+    createdAt: new Date("2025-04-01T10:00:00Z"),
+    upvotes: 15,
+    answers: 8,
+    views: 200,
+  },
+  {
+    _id: "3",
+    title: "MongoDB vs MySQL: Which One Should You Choose?",
+    tags: [
+      { _id: "1", name: "MongoDB" },
+      { _id: "2", name: "MySQL" },
+    ],
+    author: { _id: "1", name: "Jane Doe", image: "/icons/avatar.svg" },
+    createdAt: new Date(),
+    upvotes: 15,
+    answers: 8,
+    views: 200,
   },
 ];
 
@@ -46,7 +70,7 @@ const Home = async ({ searchParams }: SearchParams) => {
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>

@@ -416,8 +416,8 @@
 
   .primary-text-gradient {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -434,8 +434,11 @@
   }
 
   .card-wrapper {
-    @apply bg-light-900 shadow-light-100 dark:shadow-dark-100;
-    @apply dark:bg-[linear-gradient(232deg,rgba(23,28,35,0.41)_0%,rgba(19,22,28,0.7)_100%)];
+    @apply bg-light-900 shadow-light-100;
+  }
+  .dark .card-wrapper {
+    @apply shadow-dark-100;
+    background: linear-gradient(232deg, rgba(23, 28, 35, 0.41) 0%, rgba(19, 22, 28, 0.7) 100%);
   }
 
   .btn {

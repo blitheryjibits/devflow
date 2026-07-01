@@ -51,7 +51,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
 
   return (
     <div
-      className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-sm px-4 ${otherClasses}`}
+      className={`background-light800_dark100 flex min-h-14 grow items-center gap-4 rounded-sm px-4 ${otherClasses}`}
     >
       <Image src={imgSrc} height={24} width={24} alt="Search" className="cursor-pointer" />
       <Input
