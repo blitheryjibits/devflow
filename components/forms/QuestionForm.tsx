@@ -7,7 +7,16 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
+import { useRef } from "react";
+import { type MDXEditorMethods, type MDXEditorProps } from "@mdxeditor/editor";
+import dynamic from "next/dynamic";
+
 const QuestionForm = () => {
+  const editorRef = useRef<MDXEditorMethods>(null);
+  const Editor = dynamic(() => import("@/components/editor/Index"), {
+    // Make sure we turn SSR off
+    ssr: false,
+  });
   const form = useForm({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -52,13 +61,7 @@ const QuestionForm = () => {
             <FieldLabel htmlFor={field.name} className="paragraph-semibold text-dark400_light800">
               Question Content <span className="text-primary-500">*</span>
             </FieldLabel>
-            <Input
-              {...field}
-              id={field.name}
-              required
-              aria-invalid={fieldState.invalid}
-              className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus rounded-1.5 min-h-8 border"
-            />
+            <Editor value={field.value} fieldChange={field.onChange} editorRef={editorRef} />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
