@@ -4,6 +4,9 @@ import ROUTES from "@/constants/route";
 import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import handleError from "@/lib/handlers/error";
+import { NotFoundError } from "@/lib/https-errors";
+import dbConnect from "@/lib/mongoose";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -45,7 +48,18 @@ const questions = [
   },
 ];
 
+const test = async () => {
+  try {
+    await dbConnect();
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 const Home = async ({ searchParams }: SearchParams) => {
+  const result = await test();
+  // console.log(result);
+
   const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {
