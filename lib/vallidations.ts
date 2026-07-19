@@ -27,10 +27,7 @@ export const SignUpSchema = z.object({
       message: "Name can only contain letters and spaces.",
     }),
 
-  email: z
-    .string()
-    .min(1, { message: "Email is required." })
-    .email({ message: "Please provide a valid email address." }),
+  email: z.email({ message: "Please provide a valid email address." }),
 
   password: z
     .string()
@@ -72,18 +69,18 @@ export const AskQuestionSchema = z.object({
 export const UserSchema = z.object({
   name: z.string().min(1, "Name is required"),
   username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   bio: z.string().optional(),
-  image: z.string().url("Invalid image URL").optional(),
+  image: z.url("Invalid image URL").optional(),
   location: z.string().optional(),
-  portfolio: z.string().url("Invalid portfolio URL").optional(),
+  portfolio: z.url("Invalid portfolio URL").optional(),
   reputation: z.number().optional(),
 });
 
 export const AccountSchema = z.object({
   userId: z.string(),
   name: z.string().min(1, "Name is required"),
-  image: z.string().url("Invalid image URL").optional(),
+  image: z.url("Invalid image URL").optional(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long." })
@@ -109,8 +106,8 @@ export const SignInWithOAuthSchema = z.object({
   user: z.object({
     name: z.string().min(1, "Name is required"),
     username: z.string().min(3, "Username must be at least 3 characters"),
-    email: z.string().email("Invalid email address"),
-    image: z.string().url("Invalid image URL").optional(),
+    email: z.email("Invalid email address"),
+    image: z.url("Invalid image URL").optional(),
   }),
 });
 

@@ -26,7 +26,7 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const ticketIndex = tickets.findIndex((ticket) => ticket.id === parseInt(id));
 
-  if (ticketIndex === -1) return NextResponse.json(new Error("Tickeet not found"), { status: 404 });
+  if (ticketIndex === -1) return NextResponse.json(new Error("Ticket not found"), { status: 404 });
 
   tickets.splice(ticketIndex, 1);
 
