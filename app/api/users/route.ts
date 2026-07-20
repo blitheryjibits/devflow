@@ -9,7 +9,7 @@ export async function GET() {
   try {
     await dbConnect();
 
-    const users = await User.find();
+    const users = await User.find({});
 
     if (!users) throw new Error("No User exists");
 
