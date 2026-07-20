@@ -46,7 +46,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const validatedData = UserSchema.partial().parse(body);
 
     const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
-      new: true,
+      returnDocument: "after",
     });
 
     if (!updatedUser) throw new NotFoundError("User");
