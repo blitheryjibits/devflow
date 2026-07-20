@@ -11,6 +11,8 @@ export async function GET() {
 
     const users = User.find();
 
+    if (!users) throw new Error("No User exists");
+
     return NextResponse.json({ success: true, data: users }, { status: 200 });
   } catch (error) {
     return handleError(error, "api") as APIErrorResponse;
