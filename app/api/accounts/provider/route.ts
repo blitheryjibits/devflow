@@ -1,5 +1,6 @@
 import handleError from "@/lib/handlers/error";
 import { NotFoundError, ValidationError } from "@/lib/https-errors";
+import { flatten } from "@/lib/handlers/flattenValidationError";
 import { AccountSchema } from "@/lib/vallidations";
 import Account from "@/database/account.model";
 import { NextResponse } from "next/server";
@@ -9,12 +10,14 @@ export async function POST(request: Request) {
   const { providerAccountId } = await request.json();
 
   try {
+    await dbConnect();
+
     const validatedData = AccountSchema.partial().safeParse({ providerAccountId });
     if (!validatedData.success) {
-      throw new ValidationError(validatedData.error.flatten().fieldErrors);
+      const fieldErrors = flatten(validatedData);
+      throw new ValidationError(fieldErrors);
     }
 
-    await dbConnect();
     const account = await Account.findOne({ providerAccountId });
     if (!account) throw new NotFoundError("Account");
 

@@ -4,6 +4,7 @@ import dbConnect from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 import { UserSchema } from "@/lib/vallidations";
 import { ValidationError } from "@/lib/https-errors";
+import { flatten } from "@/lib/handlers/flattenValidationError";
 
 export async function GET() {
   try {
@@ -27,7 +28,8 @@ export async function POST(request: Request) {
     const validatedData = UserSchema.safeParse(body);
 
     if (!validatedData.success) {
-      throw new ValidationError(validatedData.error.flatten().fieldErrors);
+      const fieldErrors = flatten(validatedData);
+      throw new ValidationError(fieldErrors);
     }
 
     const { email, username } = validatedData.data;

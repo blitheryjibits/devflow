@@ -4,6 +4,7 @@ import handleError from "@/lib/handlers/error";
 import { NotFoundError, ValidationError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import { flatten } from "@/lib/handlers/flattenValidationError";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -45,7 +46,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const body = await request.json();
     const validatedData = AccountSchema.partial().safeParse(body);
 
-    if (!validatedData.success) throw new ValidationError(validatedData.error.flatten().fieldErrors);
+    if (!validatedData.success) {
+      const fieldErrors = flatten(validatedData);
+      throw new ValidationError(fieldErrors);
+    }
 
     const updatedAccount = await Account.findByIdAndUpdate(id, validatedData, {
       returnDocument: "after",

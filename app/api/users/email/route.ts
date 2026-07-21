@@ -4,6 +4,7 @@ import { UserSchema } from "@/lib/vallidations";
 import User from "@/database/user.model";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongoose";
+import { flatten } from "@/lib/handlers/flattenValidationError";
 
 export async function POST(request: Request) {
   const { email } = await request.json();
@@ -11,7 +12,8 @@ export async function POST(request: Request) {
   try {
     const validatedData = UserSchema.partial().safeParse({ email });
     if (!validatedData.success) {
-      throw new ValidationError(validatedData.error.flatten().fieldErrors);
+      const fieldErrors = flatten(validatedData);
+      throw new ValidationError(fieldErrors);
     }
 
     await dbConnect();
