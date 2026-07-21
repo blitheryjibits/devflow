@@ -1,7 +1,7 @@
 import Account from "@/database/account.model";
 import { AccountSchema } from "@/lib/vallidations";
 import handleError from "@/lib/handlers/error";
-import { NotFoundError } from "@/lib/https-errors";
+import { NotFoundError, ValidationError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
@@ -43,7 +43,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     await dbConnect();
 
     const body = await request.json();
-    const validatedData = AccountSchema.partial().parse(body);
+    const validatedData = AccountSchema.partial().safeParse(body);
+
+    if (!validatedData.success) throw new ValidationError(validatedData.error.flatten().fieldErrors);
 
     const updatedAccount = await Account.findByIdAndUpdate(id, validatedData, {
       returnDocument: "after",
