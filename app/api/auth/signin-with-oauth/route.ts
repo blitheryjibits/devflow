@@ -7,6 +7,7 @@ import { flatten } from "@/lib/handlers/flattenValidationError";
 import slugify from "slugify";
 import User from "@/database/user.model";
 import Account from "@/database/account.model";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { provider, providerAccountId, user } = await request.json();
@@ -50,12 +51,14 @@ export async function POST(request: Request) {
     );
 
     if (!existingAccount) {
-      await Account.create([{ userid: existingUser._id, name, email, image, provider, providerAccountId }], {
+      await Account.create([{ userId: existingUser._id, name, email, image, provider, providerAccountId }], {
         session,
       });
     }
 
     await session.commitTransaction();
+
+    return NextResponse.json({ success: true });
   } catch (err: unknown) {
     await session.abortTransaction();
     return handleError(err, "api") as APIErrorResponse;
