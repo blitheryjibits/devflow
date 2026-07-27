@@ -7,21 +7,21 @@ import dbConnect from "@/lib/mongoose";
 import { flatten } from "@/lib/handlers/flattenValidationError";
 
 export async function POST(request: Request) {
-  const { email } = await request.json();
+	const { email } = await request.json();
 
-  try {
-    const validatedData = UserSchema.partial().safeParse({ email });
-    if (!validatedData.success) {
-      const fieldErrors = flatten(validatedData);
-      throw new ValidationError(fieldErrors);
-    }
+	try {
+		const validatedData = UserSchema.partial().safeParse({ email });
+		if (!validatedData.success) {
+			const fieldErrors = flatten(validatedData);
+			throw new ValidationError(fieldErrors);
+		}
 
-    await dbConnect();
-    const user = await User.findOne({ email });
-    if (!user) throw new NotFoundError("User");
+		await dbConnect();
+		const user = await User.findOne({ email });
+		if (!user) throw new NotFoundError("User");
 
-    return NextResponse.json({ success: true, data: user }, { status: 200 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json({ success: true, data: user }, { status: 200 });
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }

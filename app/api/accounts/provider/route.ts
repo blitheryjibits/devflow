@@ -7,22 +7,24 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongoose";
 
 export async function POST(request: Request) {
-  const { providerAccountId } = await request.json();
+	const { providerAccountId } = await request.json();
 
-  try {
-    await dbConnect();
+	try {
+		await dbConnect();
 
-    const validatedData = AccountSchema.partial().safeParse({ providerAccountId });
-    if (!validatedData.success) {
-      const fieldErrors = flatten(validatedData);
-      throw new ValidationError(fieldErrors);
-    }
+		const validatedData = AccountSchema.partial().safeParse({
+			providerAccountId,
+		});
+		if (!validatedData.success) {
+			const fieldErrors = flatten(validatedData);
+			throw new ValidationError(fieldErrors);
+		}
 
-    const account = await Account.findOne({ providerAccountId });
-    if (!account) throw new NotFoundError("Account");
+		const account = await Account.findOne({ providerAccountId });
+		if (!account) throw new NotFoundError("Account");
 
-    return NextResponse.json({ success: true, data: account }, { status: 200 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json({ success: true, data: account }, { status: 200 });
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }

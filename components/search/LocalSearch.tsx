@@ -1,70 +1,76 @@
 "use client";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
 interface Props {
-  route: string;
-  imgSrc: string;
-  placeholder: string;
-  otherClasses?: string;
+	route: string;
+	imgSrc: string;
+	placeholder: string;
+	otherClasses?: string;
 }
 
 const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
-  const [searchQuery, setSearchQuery] = useState(query);
-  const router = useRouter();
-  const previousSearchRef = useRef(searchQuery);
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const query = searchParams.get("query") || "";
+	const [searchQuery, setSearchQuery] = useState(query);
+	const router = useRouter();
+	const previousSearchRef = useRef(searchQuery);
 
-  useEffect(() => {
-    if (previousSearchRef.current === searchQuery) return;
+	useEffect(() => {
+		if (previousSearchRef.current === searchQuery) return;
 
-    previousSearchRef.current = searchQuery;
+		previousSearchRef.current = searchQuery;
 
-    const delayDebounceFn = setTimeout(() => {
-      if (searchQuery) {
-        const newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: "query",
-          value: searchQuery,
-        });
+		const delayDebounceFn = setTimeout(() => {
+			if (searchQuery) {
+				const newUrl = formUrlQuery({
+					params: searchParams.toString(),
+					key: "query",
+					value: searchQuery,
+				});
 
-        router.push(newUrl, { scroll: false });
-      } else {
-        if (pathname === route) {
-          const newUrl = removeKeysFromUrlQuery({
-            params: searchParams.toString(),
-            keysToRemove: ["query"],
-          });
+				router.push(newUrl, { scroll: false });
+			} else {
+				if (pathname === route) {
+					const newUrl = removeKeysFromUrlQuery({
+						params: searchParams.toString(),
+						keysToRemove: ["query"],
+					});
 
-          router.push(newUrl, { scroll: false });
-        }
-      }
-    }, 800);
+					router.push(newUrl, { scroll: false });
+				}
+			}
+		}, 800);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, router, route, searchParams, pathname]);
+		return () => clearTimeout(delayDebounceFn);
+	}, [searchQuery, router, route, searchParams, pathname]);
 
-  return (
-    <div
-      className={`background-light800_dark100 flex min-h-14 grow items-center gap-4 rounded-sm px-4 ${otherClasses}`}
-    >
-      <Image src={imgSrc} height={24} width={24} alt="Search" className="cursor-pointer" />
-      <Input
-        type="text"
-        placeholder={placeholder}
-        value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-        }}
-        className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none"
-      />
-    </div>
-  );
+	return (
+		<div
+			className={`background-light800_dark100 flex min-h-14 grow items-center gap-4 rounded-sm px-4 ${otherClasses}`}
+		>
+			<Image
+				src={imgSrc}
+				height={24}
+				width={24}
+				alt="Search"
+				className="cursor-pointer"
+			/>
+			<Input
+				type="text"
+				placeholder={placeholder}
+				value={searchQuery}
+				onChange={(e) => {
+					setSearchQuery(e.target.value);
+				}}
+				className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none"
+			/>
+		</div>
+	);
 };
 
 export default LocalSearch;

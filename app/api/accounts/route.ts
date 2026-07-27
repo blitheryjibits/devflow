@@ -6,37 +6,46 @@ import { AccountSchema } from "@/lib/vallidations";
 import { ForbiddenError } from "@/lib/https-errors";
 
 export async function GET() {
-  try {
-    await dbConnect();
+	try {
+		await dbConnect();
 
-    const accounts = await Account.find({});
+		const accounts = await Account.find({});
 
-    if (!accounts) throw new Error("No accounts exists");
+		if (!accounts) throw new Error("No accounts exists");
 
-    return NextResponse.json({ success: true, data: accounts }, { status: 200 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json(
+			{ success: true, data: accounts },
+			{ status: 200 },
+		);
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }
 
 export async function POST(request: Request) {
-  try {
-    await dbConnect();
-    const body = await request.json();
+	try {
+		await dbConnect();
+		const body = await request.json();
 
-    const validatedData = AccountSchema.parse(body);
+		const validatedData = AccountSchema.parse(body);
 
-    const existingAccount = await Account.findOne({
-      provider: validatedData.provider,
-      providerAcconutId: validatedData.providerAccountId,
-    });
+		const existingAccount = await Account.findOne({
+			provider: validatedData.provider,
+			providerAcconutId: validatedData.providerAccountId,
+		});
 
-    if (existingAccount) throw new ForbiddenError("An account with the same provider already exists");
+		if (existingAccount)
+			throw new ForbiddenError(
+				"An account with the same provider already exists",
+			);
 
-    const newAccount = await Account.create(validatedData);
+		const newAccount = await Account.create(validatedData);
 
-    return NextResponse.json({ success: true, data: newAccount }, { status: 201 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json(
+			{ success: true, data: newAccount },
+			{ status: 201 },
+		);
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }

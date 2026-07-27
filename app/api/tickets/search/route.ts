@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import tickets from "@/app/database";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get("query");
+	const searchParams = request.nextUrl.searchParams;
+	const query = searchParams.get("query");
 
-  if (!query) return NextResponse.json(tickets);
+	if (!query) return NextResponse.json(tickets);
 
-  const filteredTickets = tickets.filter((ticket) =>
-    ticket.name.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-  );
+	const filteredTickets = tickets.filter((ticket) =>
+		ticket.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+	);
 
-  return NextResponse.json(filteredTickets);
+	return NextResponse.json(filteredTickets);
 }

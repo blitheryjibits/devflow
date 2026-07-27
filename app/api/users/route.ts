@@ -7,43 +7,43 @@ import { ValidationError } from "@/lib/https-errors";
 import { flatten } from "@/lib/handlers/flattenValidationError";
 
 export async function GET() {
-  try {
-    await dbConnect();
+	try {
+		await dbConnect();
 
-    const users = await User.find({});
+		const users = await User.find({});
 
-    if (!users) throw new Error("No User exists");
+		if (!users) throw new Error("No User exists");
 
-    return NextResponse.json({ success: true, data: users }, { status: 200 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json({ success: true, data: users }, { status: 200 });
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }
 
 export async function POST(request: Request) {
-  try {
-    await dbConnect();
-    const body = await request.json();
+	try {
+		await dbConnect();
+		const body = await request.json();
 
-    const validatedData = UserSchema.safeParse(body);
+		const validatedData = UserSchema.safeParse(body);
 
-    if (!validatedData.success) {
-      const fieldErrors = flatten(validatedData);
-      throw new ValidationError(fieldErrors);
-    }
+		if (!validatedData.success) {
+			const fieldErrors = flatten(validatedData);
+			throw new ValidationError(fieldErrors);
+		}
 
-    const { email, username } = validatedData.data;
-    const existingUser = await User.findOne({ email });
+		const { email, username } = validatedData.data;
+		const existingUser = await User.findOne({ email });
 
-    if (existingUser) throw new Error("User already exists");
+		if (existingUser) throw new Error("User already exists");
 
-    const existingUsername = await User.findOne({ username });
-    if (existingUsername) throw new Error("Username already exists");
+		const existingUsername = await User.findOne({ username });
+		if (existingUsername) throw new Error("Username already exists");
 
-    const newUser = await User.create(validatedData.data);
+		const newUser = await User.create(validatedData.data);
 
-    return NextResponse.json({ success: true, data: newUser }, { status: 201 });
-  } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
-  }
+		return NextResponse.json({ success: true, data: newUser }, { status: 201 });
+	} catch (error) {
+		return handleError(error, "api") as APIErrorResponse;
+	}
 }
