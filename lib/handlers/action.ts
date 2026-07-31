@@ -1,14 +1,14 @@
 "use server";
 
 import type { Session } from "next-auth";
-import { ZodError, type ZodSchema } from "zod/v3";
+import { ZodError, type ZodType } from "zod";
 import { auth } from "@/auth";
 import { NotAuthorizedError, ValidationError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
 
 type ActionOptions<T> = {
 	params?: T;
-	schema?: ZodSchema<T>;
+	schema?: ZodType<T>;
 	authorize?: boolean;
 };
 

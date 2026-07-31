@@ -3,24 +3,26 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
+	Controller,
 	type DefaultValues,
 	type FieldValues,
 	type Path,
+	type Resolver,
 	type SubmitHandler,
 	useForm,
-	Controller,
-	type Resolver,
 } from "react-hook-form";
-import { type ZodType } from "zod";
+import { toast } from "sonner";
+import type { ZodType } from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Field,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/route";
 
 /**
@@ -32,7 +34,7 @@ import ROUTES from "@/constants/route";
 interface AuthFormProps<T extends FieldValues> {
 	schema: ZodType<T, FieldValues>;
 	defaultValues: T;
-	onSubmit: (data: T) => Promise<{ success: boolean }>;
+	onSubmit: (data: T) => Promise<ActionResponse>;
 	formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -42,17 +44,25 @@ const AuthForm = <T extends FieldValues>({
 	formType,
 	onSubmit,
 }: AuthFormProps<T>) => {
+	const router = useRouter();
 	const form = useForm<T>({
 		// zodResolver has a wide resolver type; cast to the specific generic Resolver<T> to satisfy TS
-
 		resolver: zodResolver(schema) as Resolver<T>,
 		defaultValues: defaultValues as DefaultValues<T>,
 	});
 
 	const handleSubmit: SubmitHandler<T> = async (data) => {
 		// TODO: Authenticate User
-		const sentData = await onSubmit(data);
-		console.log(sentData);
+		const result = await onSubmit(data);
+
+		if (result?.success) {
+			toast.success(
+				formType === "SIGN_IN" ? "Sign in successful" : "Sign up successful",
+			);
+			router.push(`${ROUTES.HOME}`);
+		} else {
+			toast.error(result?.error?.message);
+		}
 	};
 
 	const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
