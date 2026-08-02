@@ -27,7 +27,7 @@ const UserAvatar = ({ id, name, imageUrl, className }: Props) => {
 						alt={name || "User Avatar"}
 						width={36}
 						height={36}
-						className="object-cover"
+						className="object-cover rounded-full"
 						quality={100}
 					/>
 				) : (
