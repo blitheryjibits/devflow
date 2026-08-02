@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import ROUTES from "@/constants/route";
-import LocalSearch from "@/components/search/LocalSearch";
-import HomeFilter from "@/components/filters/HomeFilter";
-import QuestionCard from "@/components/cards/QuestionCard";
 import { auth } from "@/auth";
+import QuestionCard from "@/components/cards/QuestionCard";
+import HomeFilter from "@/components/filters/HomeFilter";
+import LocalSearch from "@/components/search/LocalSearch";
+import { Button } from "@/components/ui/button";
+import ROUTES from "@/constants/route";
 
 interface SearchParams {
 	searchParams: Promise<{ [key: string]: string }>;
@@ -47,9 +47,7 @@ const questions = [
 ];
 
 const Home = async ({ searchParams }: SearchParams) => {
-	const session = await auth();
-
-	console.log("Session ", session);
+	// const session = await auth();
 
 	const { query = "", filter = "" } = await searchParams;
 
