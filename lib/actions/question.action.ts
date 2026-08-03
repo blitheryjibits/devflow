@@ -7,6 +7,8 @@ import TagQuestion from "@/database/Tag-Question.model";
 import action from "@/lib/handlers/action";
 import handleError from "../handlers/error";
 import { AskQuestionSchema } from "../validations";
+import User from "@/database/user.model";
+import { NotFoundError } from "../https-errors";
 
 export async function createQuestion(
 	params: CreateQuestionParams,
