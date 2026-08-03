@@ -1,20 +1,27 @@
 "use client";
 
-import type z from "zod";
-import { useRef } from "react";
-import { AskQuestionSchema } from "@/lib/vallidations";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { MDXEditorMethods } from "@mdxeditor/editor";
+import { RefreshCcw } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useRef, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type z from "zod";
+import Tag from "@/components/cards/TagCard";
+import ROUTES from "@/constants/route";
+import { createQuestion } from "@/lib/actions/question.action";
+import { AskQuestionSchema } from "@/lib/validations";
+import { Button } from "../ui/button";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import Tag from "@/components/cards/TagCard";
-
-import type { MDXEditorMethods } from "@mdxeditor/editor";
-import dynamic from "next/dynamic";
 
 const QuestionForm = () => {
+	const router = useRouter();
 	const editorRef = useRef<MDXEditorMethods>(null);
+	const [isPending, startTransition] = useTransition();
+
 	const Editor = dynamic(() => import("@/components/editor/Index"), {
 		// Make sure we turn SSR off
 		ssr: false,
@@ -28,8 +35,22 @@ const QuestionForm = () => {
 		},
 	});
 
-	const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-		console.log(data);
+	const handleCreateQuestion = async (
+		data: z.infer<typeof AskQuestionSchema>,
+	) => {
+		startTransition(async () => {
+			const result = await createQuestion(data);
+			if (result.success) {
+				toast.success("Question created successfully");
+			}
+
+			if (result.data) {
+				router.push(ROUTES.QUESTION(result.data._id));
+			} else {
+				toast.error(`Error: ${result.status}
+				${result.error?.message || "Failed to create question"}`);
+			}
+		});
 	};
 
 	const handleInputKeyDown = (
@@ -165,8 +186,19 @@ const QuestionForm = () => {
 			/>
 
 			<div className="mt-16 flex justify-end">
-				<Button type="submit" className="primary-gradient text-light-900 w-fit">
-					Ask Question
+				<Button
+					type="submit"
+					disabled={isPending}
+					className="primary-gradient text-light-900 w-fit"
+				>
+					{isPending ? (
+						<>
+							<RefreshCcw className="mr-2 size-4 animate-spin" />
+							<span>Submitting...</span>
+						</>
+					) : (
+						<>Ask A Question</>
+					)}
 				</Button>
 			</div>
 		</form>
