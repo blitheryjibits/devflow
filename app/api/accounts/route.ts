@@ -1,9 +1,9 @@
+import { NextResponse } from "next/server";
 import Account from "@/database/account.model";
 import handleError from "@/lib/handlers/error";
-import dbConnect from "@/lib/mongoose";
-import { NextResponse } from "next/server";
-import { AccountSchema } from "@/lib/vallidations";
 import { ForbiddenError } from "@/lib/https-errors";
+import dbConnect from "@/lib/mongoose";
+import { AccountSchema } from "@/lib/validations";
 
 export async function GET() {
 	try {

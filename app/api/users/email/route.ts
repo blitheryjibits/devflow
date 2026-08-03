@@ -1,10 +1,10 @@
-import handleError from "@/lib/handlers/error";
-import { NotFoundError, ValidationError } from "@/lib/https-errors";
-import { UserSchema } from "@/lib/vallidations";
-import User from "@/database/user.model";
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongoose";
+import User from "@/database/user.model";
+import handleError from "@/lib/handlers/error";
 import { flatten } from "@/lib/handlers/flattenValidationError";
+import { NotFoundError, ValidationError } from "@/lib/https-errors";
+import dbConnect from "@/lib/mongoose";
+import { UserSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
 	const { email } = await request.json();

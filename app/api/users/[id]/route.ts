@@ -1,9 +1,9 @@
+import { NextResponse } from "next/server";
 import User from "@/database/user.model";
-import { UserSchema } from "@/lib/vallidations";
 import handleError from "@/lib/handlers/error";
 import { NotFoundError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
-import { NextResponse } from "next/server";
+import { UserSchema } from "@/lib/validations";
 
 export async function GET(
 	_: Request,

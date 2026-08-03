@@ -6,7 +6,7 @@ import { signIn } from "@/auth";
 import Account from "@/database/account.model";
 import User from "@/database/user.model";
 import action from "@/lib/handlers/action";
-import { SignInSchema, SignUpSchema } from "@/lib/vallidations";
+import { SignInSchema, SignUpSchema } from "@/lib/validations";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../https-errors";
 

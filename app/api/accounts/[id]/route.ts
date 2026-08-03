@@ -1,10 +1,10 @@
+import { NextResponse } from "next/server";
 import Account from "@/database/account.model";
-import { AccountSchema } from "@/lib/vallidations";
 import handleError from "@/lib/handlers/error";
+import { flatten } from "@/lib/handlers/flattenValidationError";
 import { NotFoundError, ValidationError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
-import { NextResponse } from "next/server";
-import { flatten } from "@/lib/handlers/flattenValidationError";
+import { AccountSchema } from "@/lib/validations";
 
 export async function GET(
 	_: Request,
