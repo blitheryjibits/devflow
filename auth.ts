@@ -6,7 +6,7 @@ import Google from "next-auth/providers/google";
 import type { IAccountDoc } from "@/database/account.model";
 import type { IUserDoc } from "./database/user.model";
 import { api } from "./lib/api";
-import { SignInSchema } from "./lib/vallidations";
+import { SignInSchema } from "./lib/validations";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
