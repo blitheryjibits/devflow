@@ -2,8 +2,8 @@
 
 import mongoose from "mongoose";
 import Question from "@/database/question.model";
+import Tag from "@/database/Tag.model";
 import TagQuestion from "@/database/Tag-Question.model";
-import Tag from "@/database/tag.model";
 import action from "@/lib/handlers/action";
 import handleError from "../handlers/error";
 import { AskQuestionSchema } from "../validations";
