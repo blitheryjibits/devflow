@@ -4,11 +4,11 @@ import mongoose from "mongoose";
 import Question from "@/database/question.model";
 import Tag from "@/database/Tag.model";
 import TagQuestion from "@/database/Tag-Question.model";
+import User from "@/database/user.model";
 import action from "@/lib/handlers/action";
 import handleError from "../handlers/error";
-import { AskQuestionSchema } from "../validations";
-import User from "@/database/user.model";
 import { NotFoundError } from "../https-errors";
+import { AskQuestionSchema } from "../validations";
 
 export async function createQuestion(
 	params: CreateQuestionParams,
@@ -48,7 +48,7 @@ export async function createQuestion(
 			const existingTag = await Tag.findOneAndUpdate(
 				{ name: { $regex: new RegExp(`^${tag}$`, "i") } },
 				{ $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-				{ upsert: true, new: true, session },
+				{ upsert: true, returnDocument: "after", session },
 			);
 
 			tagIds.push(existingTag._id);
