@@ -37,12 +37,9 @@ export async function signUpWithCredentials(
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		console.log("creating user with username: ", username);
 		const [newUser] = await User.create([{ username, name, email }], session);
 
-		console.log("creating account for user: ", newUser._id);
-		console.log("creating account for with password: ", hashedPassword);
-		const newAccount = await Account.create(
+		await Account.create(
 			[
 				{
 					userId: newUser._id,
@@ -54,8 +51,6 @@ export async function signUpWithCredentials(
 			],
 			{ session },
 		);
-
-		console.log("new account created using credentials: ", newAccount);
 
 		await session.commitTransaction();
 
