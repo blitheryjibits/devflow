@@ -42,7 +42,10 @@ export async function createQuestion(
 		}
 
 		const tagIds: mongoose.Types.ObjectId[] = [];
-		const tagQuestionDocuments = [];
+		const tagQuestionDocuments: {
+			tag: mongoose.Types.ObjectId;
+			question: mongoose.Types.ObjectId;
+		}[] = [];
 
 		for (const tag of tags) {
 			const existingTag = await Tag.findOneAndUpdate(
@@ -52,11 +55,10 @@ export async function createQuestion(
 			);
 
 			tagIds.push(existingTag._id);
-			tagQuestionDocuments.push(
-				question._id,
-				{ $push: { tags: { $each: tagIds } } },
-				{ session },
-			);
+			tagQuestionDocuments.push({
+				tag: existingTag._id,
+				question: question._id,
+			});
 		}
 
 		await TagQuestion.insertMany(tagQuestionDocuments, { session });
