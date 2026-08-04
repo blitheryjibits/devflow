@@ -91,7 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				user: userInfo,
 				provider: account.provider as "github" | "google",
 				providerAccountId: account.providerAccountId,
-			})) as ActionResponse<IUserDoc>;
+			})) as ActionResponse;
 
 			if (!success) return false;
 

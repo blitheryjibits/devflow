@@ -5,6 +5,7 @@ import { ZodError, type ZodType } from "zod";
 import { auth } from "@/auth";
 import { NotAuthorizedError, ValidationError } from "@/lib/https-errors";
 import dbConnect from "@/lib/mongoose";
+import { flatten } from "./flattenValidationError";
 
 type ActionOptions<T> = {
 	params?: T;
@@ -19,12 +20,13 @@ async function action<T>({
 }: ActionOptions<T>) {
 	if (schema && params) {
 		try {
+			console.log("validating schema in action.ts");
 			schema.parse(params);
+			console.log("schema validation successful in action.ts");
 		} catch (error) {
 			if (error instanceof ZodError) {
-				return new ValidationError(
-					error.flatten().fieldErrors as Record<string, string[]>,
-				);
+				const fieldErrors = flatten(error);
+				return new ValidationError(fieldErrors);
 			} else {
 				return new Error("Schema Validation Failed");
 			}
