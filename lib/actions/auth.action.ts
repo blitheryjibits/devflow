@@ -35,12 +35,13 @@ export async function signUpWithCredentials(
 		const existingUsername = await User.findOne({ username }).session(session);
 		if (existingUsername) throw new Error("Username already exists");
 
-		const hashedPassword = bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
 		console.log("creating user with username: ", username);
 		const [newUser] = await User.create([{ username, name, email }], session);
 
 		console.log("creating account for user: ", newUser._id);
+		console.log("creating account for with password: ", hashedPassword);
 		const newAccount = await Account.create(
 			[
 				{
