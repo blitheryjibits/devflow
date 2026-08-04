@@ -87,15 +87,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 						: (user.name?.toLowerCase() as string),
 			};
 
-			const { data: dbUser, success } = (await api.auth.oAuthSignIn({
+			const { success } = (await api.auth.oAuthSignIn({
 				user: userInfo,
 				provider: account.provider as "github" | "google",
 				providerAccountId: account.providerAccountId,
 			})) as ActionResponse<IUserDoc>;
 
-			if (!success || !dbUser) return false;
-
-			user.id = dbUser._id.toString();
+			if (!success) return false;
 
 			return true;
 		},
