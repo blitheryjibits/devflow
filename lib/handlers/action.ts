@@ -20,9 +20,7 @@ async function action<T>({
 }: ActionOptions<T>) {
 	if (schema && params) {
 		try {
-			console.log("validating schema in action.ts");
 			schema.parse(params);
-			console.log("schema validation successful in action.ts");
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const fieldErrors = flatten(error);
