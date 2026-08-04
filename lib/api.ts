@@ -1,7 +1,9 @@
-import { fetchHandler } from "@/lib/handlers/fetch";
-import type { IUser } from "@/database/user.model";
 import type { IAccount } from "@/database/account.model";
+import type { IUser } from "@/database/user.model";
+import { fetchHandler } from "@/lib/handlers/fetch";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 import ROUTES from "@/constants/route";
 export const api = {
 	auth: {
@@ -10,13 +12,10 @@ export const api = {
 			provider,
 			providerAccountId,
 		}: SignInWithOAuthParams) =>
-			fetchHandler(
-				`${process.env.API_BASE_URL}/auth/${ROUTES.SIGNIN_WITH_OAUTH}`,
-				{
-					method: "POST",
-					body: JSON.stringify({ user, provider, providerAccountId }),
-				},
-			),
+			fetchHandler(`${API_BASE_URL}/auth/${ROUTES.SIGNIN_WITH_OAUTH}`, {
+				method: "POST",
+				body: JSON.stringify({ user, provider, providerAccountId }),
+			}),
 	},
 	users: {
 		getAll: () => fetchHandler(`${API_BASE_URL}/users`),
