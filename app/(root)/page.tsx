@@ -14,6 +14,7 @@ const questions = [
 	{
 		_id: "1",
 		title: "how to build in react",
+		content: "edfasdfas",
 		tags: [{ _id: "1", name: "React" }],
 		author: { _id: "1", name: "John Doe", image: "/icons/avatar.svg" },
 		createdAt: new Date("2023-06-01T10:00:00Z"),
@@ -24,6 +25,7 @@ const questions = [
 	{
 		_id: "2",
 		title: "how to build in javascript",
+		content: "edfasdfas",
 		tags: [{ _id: "2", name: "Javascript" }],
 		author: { _id: "2", name: "John Doe", image: "/icons/avatar.svg" },
 		createdAt: new Date("2025-04-01T10:00:00Z"),
@@ -34,6 +36,7 @@ const questions = [
 	{
 		_id: "3",
 		title: "MongoDB vs MySQL: Which One Should You Choose?",
+		content: "edfasdfas",
 		tags: [
 			{ _id: "1", name: "MongoDB" },
 			{ _id: "2", name: "MySQL" },
