@@ -1,70 +1,26 @@
 import Link from "next/link";
-import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/route";
+import { getQuestions } from "@/lib/actions/question.action";
 
 interface SearchParams {
 	searchParams: Promise<{ [key: string]: string }>;
 }
 
-const questions = [
-	{
-		_id: "1",
-		title: "how to build in react",
-		content: "edfasdfas",
-		tags: [{ _id: "1", name: "React" }],
-		author: { _id: "1", name: "John Doe", image: "/icons/avatar.svg" },
-		createdAt: new Date("2023-06-01T10:00:00Z"),
-		upvotes: 10,
-		answers: 5,
-		views: 100,
-	},
-	{
-		_id: "2",
-		title: "how to build in javascript",
-		content: "edfasdfas",
-		tags: [{ _id: "2", name: "Javascript" }],
-		author: { _id: "2", name: "John Doe", image: "/icons/avatar.svg" },
-		createdAt: new Date("2025-04-01T10:00:00Z"),
-		upvotes: 15,
-		answers: 8,
-		views: 200,
-	},
-	{
-		_id: "3",
-		title: "MongoDB vs MySQL: Which One Should You Choose?",
-		content: "edfasdfas",
-		tags: [
-			{ _id: "1", name: "MongoDB" },
-			{ _id: "2", name: "MySQL" },
-		],
-		author: { _id: "1", name: "Jane Doe", image: "/icons/avatar.svg" },
-		createdAt: new Date(),
-		upvotes: 15,
-		answers: 8,
-		views: 200,
-	},
-];
-
 const Home = async ({ searchParams }: SearchParams) => {
-	// const session = await auth();
+	const { page, pageSize, query, filter } = await searchParams;
 
-	const { query = "", filter = "" } = await searchParams;
-
-	const filteredQuestions = questions.filter((question) => {
-		const matchesQuery = question.title
-			.toLowerCase()
-			.includes(query?.toLowerCase());
-		const matchesFilter = filter
-			? question.tags.some(
-					(tag) => tag.name.toLowerCase() === filter.toLowerCase(),
-				)
-			: true;
-		return matchesQuery && matchesFilter;
+	const { success, data, error } = await getQuestions({
+		page: Number(page) || 1,
+		pageSize: Number(pageSize) || 10,
+		query: query || "",
+		filter: filter || "",
 	});
+
+	const { questions } = data || {};
 
 	return (
 		<>
@@ -88,11 +44,25 @@ const Home = async ({ searchParams }: SearchParams) => {
 
 			<HomeFilter />
 
-			<div className="mt-10 flex w-full flex-col gap-6">
-				{filteredQuestions.map((question) => (
-					<QuestionCard key={question._id} question={question} />
-				))}
-			</div>
+			{success ? (
+				<div className="mt-10 flex w-full flex-col gap-6">
+					{questions && questions.length > 0 ? (
+						questions.map((question) => (
+							<QuestionCard key={question._id} question={question} />
+						))
+					) : (
+						<div className="mt-10 flex w-full items-center justify-center">
+							<p className="text-dark400_light700">No Questions Found</p>
+						</div>
+					)}
+				</div>
+			) : (
+				<div className="mt-10 flex w-full items-center justify-center">
+					<p className="text-dark400_light700">
+						{error?.message || "Failed to Retrieve Questions"}
+					</p>
+				</div>
+			)}
 		</>
 	);
 };
