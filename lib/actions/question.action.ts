@@ -116,9 +116,14 @@ export async function editQuestion(
 			await question.save({ session });
 		}
 
-		const tagsToAdd = tags.filter(
-			(tag) => !question.tags.includes(tag.toLowerCase()),
+		const existingTagNames = question.tags.map((tag: ITagDoc) =>
+			tag.name.toLowerCase(),
 		);
+
+		const tagsToAdd = tags.filter(
+			(tag) => !existingTagNames.includes(tag.toLowerCase()),
+		);
+
 		const tagsToRemove = question.tags.filter(
 			(tag: ITagDoc) => !tags.includes(tag.name.toLowerCase()),
 		);
