@@ -219,72 +219,71 @@ export async function getQuestion(
 export async function getQuestions(
 	params: PaginatedSearchParams,
 ): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
-	throw new Error("oops! threw an error in getQuestions");
+	const validationResult = await action({
+		params,
+		schema: PaginatedSearchParamsSchema,
+	});
 
-	// const validationResult = await action({
-	// 	params,
-	// 	schema: PaginatedSearchParamsSchema,
-	// });
+	if (validationResult instanceof Error) {
+		return handleError(validationResult) as ErrorResponse;
+	}
 
-	// if (validationResult instanceof Error) {
-	// 	return handleError(validationResult) as ErrorResponse;
-	// }
+	const { page = 1, pageSize = 10, query, filter } = params;
+	const skip = (Number(page) - 1) * pageSize;
+	const limit = Number(pageSize);
 
-	// const { page = 1, pageSize = 10, query, filter } = params;
-	// const skip = (Number(page) - 1) * pageSize;
-	// const limit = Number(pageSize);
+	const filterQuery: mongoose.QueryFilter<typeof Question> = {};
 
-	// const filterQuery: mongoose.QueryFilter<typeof Question> = {};
+	if (filter === "recommended")
+		return { success: true, data: { questions: [], isNext: false } };
 
-	// if (filter === "recommended")
-	// 	return { success: true, data: { questions: [], isNext: false } };
+	if (query) {
+		filterQuery.$or = [
+			{ title: { $regex: new RegExp(query, "i") } },
+			{ content: { $regex: new RegExp(query, "i") } },
+		];
+	}
 
-	// if (query) {
-	// 	filterQuery.$or = [
-	// 		{ title: { $regex: new RegExp(query, "i") } },
-	// 		{ content: { $regex: new RegExp(query, "i") } },
-	// 	];
-	// }
+	let sortCriteria = {};
 
-	// let sortCriteria = {};
+	switch (filter) {
+		case "newest":
+			sortCriteria = { createdAt: -1 };
+			break;
+		case "unanswered":
+			filterQuery.answer = 0;
+			sortCriteria = { createdAt: -1 };
+			break;
+		case "popular":
+			sortCriteria = { upvotes: -1 };
+			break;
+		default:
+			sortCriteria = { createdAt: -1 };
+			break;
+	}
 
-	// switch (filter) {
-	// 	case "newest":
-	// 		sortCriteria = { createdAt: -1 };
-	// 		break;
-	// 	case "unanswered":
-	// 		filterQuery.answer = 0;
-	// 		sortCriteria = { createdAt: -1 };
-	// 		break;
-	// 	case "popular":
-	// 		sortCriteria = { upvotes: -1 };
-	// 		break;
-	// 	default:
-	// 		sortCriteria = { createdAt: -1 };
-	// 		break;
-	// }
+	try {
+		throw new Error("Oops! there was an error");
+		// const totalQuestions = await Question.countDocuments(filterQuery);
 
-	// try {
-	// 	const totalQuestions = await Question.countDocuments(filterQuery);
+		// const questions = await Question.find(filterQuery)
+		// 	.populate("tags", "name")
+		// 	.populate("author", "name image")
+		// 	.lean()
+		// 	.sort(sortCriteria)
+		// 	.skip(skip)
+		// 	.limit(limit);
 
-	// 	const questions = await Question.find(filterQuery)
-	// 		.populate("tags", "name")
-	// 		.populate("author", "name image")
-	// 		.lean()
-	// 		.sort(sortCriteria)
-	// 		.skip(skip)
-	// 		.limit(limit);
+		// const isNext = totalQuestions > skip + questions.length;
 
-	// 	const isNext = totalQuestions > skip + questions.length;
-
-	// 	return {
-	// 		success: true,
-	// 		data: {
-	// 			questions: JSON.parse(JSON.stringify(questions)),
-	// 			isNext,
-	// 		},
-	// 	};
-	// } catch (error) {
-	// 	return handleError(error) as ErrorResponse;
-	// }
+		// return {
+		// 	success: true,
+		// 	data: {
+		// 		questions: JSON.parse(JSON.stringify(questions)),
+		// 		isNext,
+		// 	},
+		// };
+	} catch (error) {
+		return handleError(error) as ErrorResponse;
+	}
 }
