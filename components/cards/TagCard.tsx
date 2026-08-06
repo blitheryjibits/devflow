@@ -1,8 +1,9 @@
-import Link from "next/link";
-import ROUTES from "@/constants/route";
-import { Badge } from "@/components/ui/badge";
-import { getDeviconsClassName } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import ROUTES from "@/constants/route";
+import { getDeviconsClassName } from "@/lib/utils";
+
 interface Props {
 	_id: string;
 	name: string;
@@ -56,7 +57,7 @@ const TagCard = ({
 				{content}
 			</button>
 		) : (
-			<Link href={ROUTES.TAGS(_id)} className="flex justify-between gap-2">
+			<Link href={ROUTES.TAG(_id)} className="flex justify-between gap-2">
 				{content}
 			</Link>
 		);
