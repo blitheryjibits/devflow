@@ -263,26 +263,25 @@ export async function getQuestions(
 	}
 
 	try {
-		throw new Error("Oops! there was an error");
-		// const totalQuestions = await Question.countDocuments(filterQuery);
+		const totalQuestions = await Question.countDocuments(filterQuery);
 
-		// const questions = await Question.find(filterQuery)
-		// 	.populate("tags", "name")
-		// 	.populate("author", "name image")
-		// 	.lean()
-		// 	.sort(sortCriteria)
-		// 	.skip(skip)
-		// 	.limit(limit);
+		const questions = await Question.find(filterQuery)
+			.populate("tags", "name")
+			.populate("author", "name image")
+			.lean()
+			.sort(sortCriteria)
+			.skip(skip)
+			.limit(limit);
 
-		// const isNext = totalQuestions > skip + questions.length;
+		const isNext = totalQuestions > skip + questions.length;
 
-		// return {
-		// 	success: true,
-		// 	data: {
-		// 		questions: JSON.parse(JSON.stringify(questions)),
-		// 		isNext,
-		// 	},
-		// };
+		return {
+			success: true,
+			data: {
+				questions: JSON.parse(JSON.stringify(questions)),
+				isNext,
+			},
+		};
 	} catch (error) {
 		return handleError(error) as ErrorResponse;
 	}
