@@ -27,8 +27,8 @@ export const getTags = async (
 		queryFilter.$or = [
 			{
 				name: {
-					regex: query,
-					options: "i",
+					$regex: query,
+					$options: "i",
 				},
 			},
 		];
@@ -102,7 +102,7 @@ export const getTagQuestions = async (
 		};
 
 		if (query) {
-			queryFilter.title = { regex: query, options: "i" };
+			queryFilter.title = { $regex: query, $options: "i" };
 		}
 
 		const totalQuestions = await Question.countDocuments(queryFilter);
