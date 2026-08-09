@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
+import { cn } from "@/lib/utils";
 
 const HomeFilter = () => {
 	const router = useRouter();

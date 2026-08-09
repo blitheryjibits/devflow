@@ -39,8 +39,6 @@ const Page = async ({ params, searchParams }: RouteParams) => {
 				/>
 			</section>
 
-			<HomeFilter />
-
 			<DataRenderer
 				success={success}
 				error={error}
