@@ -102,12 +102,7 @@ export const getTagQuestions = async (
 		};
 
 		if (query) {
-			queryFilter.title = [
-				{
-					regex: query,
-					options: "i",
-				},
-			];
+			queryFilter.title = { regex: query, options: "i" };
 		}
 
 		const totalQuestions = await Question.countDocuments(queryFilter);
