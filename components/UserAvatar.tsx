@@ -2,15 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import ROUTES from "@/constants/route";
+import { cn } from "@/lib/utils";
 
 interface Props {
 	id: string;
 	name?: string;
 	imageUrl?: string | null;
 	className?: string;
+	fallbackClassName?: string;
 }
 
-const UserAvatar = ({ id, name, imageUrl, className }: Props) => {
+const UserAvatar = ({
+	id,
+	name,
+	imageUrl,
+	className,
+	fallbackClassName,
+}: Props) => {
 	const initials = name
 		?.split(" ")
 		.map((n: string) => n[0])
@@ -31,7 +39,9 @@ const UserAvatar = ({ id, name, imageUrl, className }: Props) => {
 						quality={100}
 					/>
 				) : (
-					<AvatarFallback className="text-sm font-medium text-white">
+					<AvatarFallback
+						className={cn("text-sm font-medium text-white", fallbackClassName)}
+					>
 						{initials}
 					</AvatarFallback>
 				)}
