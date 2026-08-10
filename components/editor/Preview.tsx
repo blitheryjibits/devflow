@@ -15,13 +15,13 @@ const Preview = ({ content = "" }: { content: string }) => {
 			<MDXRemote
 				source={formattedContent}
 				components={{
-					pre: (props) => {
+					pre: (props) => (
 						<Code
 							{...props}
 							lineNumbers
 							className="shadow-light-200 dark:shadow-dark-200"
-						/>;
-					},
+						/>
+					),
 				}}
 			/>
 		</section>
