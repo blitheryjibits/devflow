@@ -1,16 +1,21 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/route";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
 	const { id } = await params;
 	const { success, data: question } = await getQuestion({ questionId: id });
+
+	after(async () => {
+		await incrementViews({ questionId: id });
+	});
 
 	if (!success || !question) {
 		return redirect("/404");
@@ -63,7 +68,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 				<Metric
 					imgUrl="/icons/eye.svg"
 					alt="eye icon"
-					value={formatNumber(views)}
+					value={formatNumber(views) + 1}
 					title=""
 					textStyles="small-regular text-dash400_light700"
 				/>
