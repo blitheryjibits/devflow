@@ -77,7 +77,7 @@ export const getTags = async (
 };
 
 export const getTagQuestions = async (
-	params: getTagQuestionsParams,
+	params: GetTagQuestionsParams,
 ): Promise<
 	ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>
 > => {
