@@ -7,7 +7,6 @@ import Account from "@/database/account.model";
 import User from "@/database/user.model";
 import action from "@/lib/handlers/action";
 import { SignInSchema, SignUpSchema } from "@/lib/validations";
-import type { AuthCredentials } from "@/types/action";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../https-errors";
 

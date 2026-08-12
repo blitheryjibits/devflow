@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/route";
 import { Answer, Question } from "@/database";
 import type { IAnswerDoc } from "@/database/answer.model";
-import type { CreateAnswerParams, GetAnswersParams } from "@/types/action";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { AnswerServerSchema, GetAnswersSchema } from "../validations";

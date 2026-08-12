@@ -1,5 +1,3 @@
-import { createAnswer } from "@/lib/actions/answer.action";
-
 interface SignInWithOAuthParams {
 	provider: "github" | "google";
 	providerAccountId: string;
