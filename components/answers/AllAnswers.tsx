@@ -11,9 +11,7 @@ const AllAnswers = ({ data, success, error, totalAnswers }: Props) => {
 		<div className="mt-11">
 			<div className="flex items-center justify-between">
 				<h3 className="primary-text-gradient">
-					{totalAnswers > 1
-						? `${totalAnswers} answers`
-						: `${totalAnswers} answer`}
+					{totalAnswers} {totalAnswers === 1 ? ` answer` : ` answers`}
 				</h3>
 				<p>Filters</p>
 			</div>
@@ -22,9 +20,9 @@ const AllAnswers = ({ data, success, error, totalAnswers }: Props) => {
 				error={error}
 				success={success}
 				empty={EMPTY_ANSWERS}
-				render={(answers) => {
-					answers.map((answer) => <AnswerCard key={answer._id} {...answer} />);
-				}}
+				render={(answers) =>
+					answers.map((answer) => <AnswerCard key={answer._id} {...answer} />)
+				}
 			/>
 		</div>
 	);
