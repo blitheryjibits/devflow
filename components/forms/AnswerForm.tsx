@@ -6,16 +6,9 @@ import type { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import {
-	Controller,
-	type DefaultValues,
-	type FieldValues,
-	type Path,
-	type Resolver,
-	type SubmitHandler,
-	useForm,
-} from "react-hook-form";
+import { useRef, useState, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +17,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@/components/ui/field";
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validations";
 
 const Editor = dynamic(() => import("@/components/editor/Index"), {
@@ -31,9 +25,9 @@ const Editor = dynamic(() => import("@/components/editor/Index"), {
 	ssr: false,
 });
 
-const AnswerForm = () => {
+const AnswerForm = ({ questionId }: { questionId: string }) => {
 	const editorRef = useRef<MDXEditorMethods>(null);
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isAnswering, startAnsweringTransition] = useTransition();
 	const [isAiSubmitting, setAiIsSubmitting] = useState(false);
 
 	const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -45,7 +39,20 @@ const AnswerForm = () => {
 	});
 
 	const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-		console.log(values);
+		startAnsweringTransition(async () => {
+			const result = await createAnswer({
+				questionId,
+				content: values.content,
+			});
+
+			if (result.success) {
+				form.reset();
+
+				toast.success("Your Answer was posted successfully");
+			} else {
+				toast.error(result.error?.message);
+			}
+		});
 	};
 
 	return (
@@ -108,10 +115,10 @@ const AnswerForm = () => {
 				<div className="flex justify-end">
 					<Button
 						type="submit"
-						disabled={isSubmitting}
+						disabled={isAnswering}
 						className="primary-gradient w-fit"
 					>
-						{isSubmitting ? (
+						{isAnswering ? (
 							<ReloadIcon className="mr-2 size-4 animate-spin" />
 						) : (
 							"Post Answer"
