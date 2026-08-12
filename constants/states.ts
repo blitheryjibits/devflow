@@ -47,3 +47,9 @@ export const EMPTY_COLLECTIONS = {
 		href: ROUTES.COLLECTION,
 	},
 };
+
+export const EMPTY_ANSWERS = {
+	title: "Ahh, No Answers Yet!",
+	message:
+		"The answers board is empty. Post your brilliant answer to get things rolling",
+};
