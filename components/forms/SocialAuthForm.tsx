@@ -1,9 +1,10 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/route";
+
 const SocialAuthForm = () => {
 	const buttonClass =
 		"background-dark400_light900 body-medium text-dark200_light800 rounded-2 min-h-12 flex-1 px-4 py-3.5";
