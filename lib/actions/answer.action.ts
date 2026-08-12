@@ -35,7 +35,7 @@ export async function createAnswer(
 		const [newAnswer] = await Answer.create(
 			[
 				{
-					authorId: userId,
+					author: userId,
 					question: questionId,
 					content,
 				},
