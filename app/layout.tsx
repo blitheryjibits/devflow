@@ -7,8 +7,8 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ThemeProvider } from "@/context/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/context/theme-provider";
 import { cn } from "@/lib/utils";
 
 const playfairDisplayHeading = Playfair_Display({
