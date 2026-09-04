@@ -1,4 +1,4 @@
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import handeError from "@/lib/handlers/error";
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 		}
 
 		const { text } = await generateText({
-			model: "google/gemini-2.5-flash",
+			model: google("gemini-2.5-flash"),
 			prompt: `Generate a markdown-formatted response to the follow question: ${question} based on the provided content: ${content}. The response should be informative, concise, and well-structured. Include relevant examples or references if applicable.`,
 			system:
 				"You are a helpful assistant that provides informative responses in markdown format. Use appropriate markdown syntax for headings, lists, code blocks, and emphasis where necessary. For code blocks, use short-form smaller case language identifiers (e.g., 'js' for JavaScript, 'py' for Python, 'ts' for TypeScript, 'html' for HTML, 'css' for CSS, etc.).",
