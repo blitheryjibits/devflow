@@ -1,4 +1,5 @@
-import { google } from "@ai-sdk/google";
+// import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import handeError from "@/lib/handlers/error";
@@ -8,6 +9,9 @@ import { AIAnswerSchema } from "@/lib/validations";
 
 export async function POST(req: Request) {
 	const { question, content } = await req.json();
+	const google = createGoogleGenerativeAI({
+		apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+	});
 
 	try {
 		const validatedData = AIAnswerSchema.safeParse({ question, content });
