@@ -1,4 +1,3 @@
-// import { google } from "@ai-sdk/google";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
@@ -26,7 +25,7 @@ export async function POST(req: Request) {
 		}
 
 		const { text } = await generateText({
-			model: google("gemini-3.5-flash-lite"),
+			model: google("gemini-3.1-flash-lite"),
 			prompt: `Generate a markdown-formatted response to the following question: ${question}.
             Consider the provided context: **Context:** ${content}
             Also, prioritize and incorporate the user's answer when formulating your response: **User's Answer:** ${userAnswer}
