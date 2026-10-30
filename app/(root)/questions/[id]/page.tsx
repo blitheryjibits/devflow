@@ -13,7 +13,7 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { Votes } from "@/components/votes/Votes";
 import { hasVoted } from "@/lib/actions/vote.action";
-import Suspense from "react";
+import { Suspense } from "react";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
