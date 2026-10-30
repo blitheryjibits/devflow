@@ -76,7 +76,8 @@ export const getTimeStamp = (createdAt: Date): string => {
 	return `${Math.floor(years)} years ago`;
 };
 
-export const formatNumber = (number: number) => {
+export const formatNumber = (number: number | null | undefined) => {
+	if (number == null || number === undefined) return "undefined number";
 	if (number >= 1000000) {
 		return `${(number / 1000000).toFixed(1)}M`;
 	} else if (number >= 1000) {
