@@ -18,7 +18,9 @@ import { Suspense } from "react";
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
-  console.log(`data from question in questions/id: ${question.views}`);
+  console.log(
+    `data from question in questions/id: ${JSON.stringify(question, null, 2)}`,
+  );
   after(async () => {
     await incrementViews({ questionId: id });
   });
