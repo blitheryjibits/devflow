@@ -100,7 +100,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric
           imgUrl="/icons/eye.svg"
           alt="eye icon"
-          value={formatNumber(views + 1)}
+          value={views + 1}
           title=""
           textStyles="small-regular text-dash400_light700"
         />
