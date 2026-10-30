@@ -13,7 +13,7 @@ const EditQuestion = async ({ params }: RouteParams) => {
 
   const { data: question, success } = await getQuestion({ questionId: id });
 
-  console.log(`question data from inside questions/id/edit/page: ${data}`);
+  console.log(`question data from inside questions/id/edit/page: ${question}`);
 
   if (!success) return notFound();
 
