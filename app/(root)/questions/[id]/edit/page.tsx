@@ -5,24 +5,26 @@ import ROUTES from "@/constants/route";
 import { getQuestion } from "@/lib/actions/question.action";
 
 const EditQuestion = async ({ params }: RouteParams) => {
-	const { id } = await params;
-	if (!id) return notFound();
+  const { id } = await params;
+  if (!id) return notFound();
 
-	const session = await auth();
-	if (!session) return redirect("/sign-in");
+  const session = await auth();
+  if (!session) return redirect("/sign-in");
 
-	const { data: question, success } = await getQuestion({ questionId: id });
+  const { data: question, success } = await getQuestion({ questionId: id });
 
-	if (!success) return notFound();
+  console.log(`question data from inside questions/id/edit/page: ${data}`);
 
-	if (question?.author?.toString() !== session?.user?.id)
-		redirect(ROUTES.QUESTION(id));
+  if (!success) return notFound();
 
-	return (
-		<main>
-			<QuestionForm question={question} isEdit />
-		</main>
-	);
+  if (question?.author?.toString() !== session?.user?.id)
+    redirect(ROUTES.QUESTION(id));
+
+  return (
+    <main>
+      <QuestionForm question={question} isEdit />
+    </main>
+  );
 };
 
 export default EditQuestion;

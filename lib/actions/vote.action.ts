@@ -1,6 +1,7 @@
 "use server";
 
 import mongoose, { type ClientSession } from "mongoose";
+import { revalidatePath } from "next/cache";
 import { Answer, Question, Vote } from "@/database";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -93,9 +94,20 @@ export async function createVote(
 				);
 			}
 		} else {
-			await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
-				session,
-			});
+			await Vote.create(
+				[
+					{
+						author: userId,
+						actionId: targetId,
+						actionType: targetType,
+						voteType,
+						// change: 1,
+					},
+				],
+				{
+					session,
+				},
+			);
 			await updateVoteCount(
 				{ targetId, targetType, voteType, change: 1 },
 				session,
@@ -104,6 +116,8 @@ export async function createVote(
 
 		await session.commitTransaction();
 		await session.endSession();
+
+		revalidatePath(ROUTES.QUESTION(targetId));
 
 		return { success: true };
 	} catch (error) {

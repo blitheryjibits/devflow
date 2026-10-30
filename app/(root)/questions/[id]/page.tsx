@@ -14,111 +14,125 @@ import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { Votes } from "@/components/votes/Votes";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
-	const { id } = await params;
-	const { success, data: question } = await getQuestion({ questionId: id });
+  const { id } = await params;
+  const { success, data: question } = await getQuestion({ questionId: id });
 
-	after(async () => {
-		await incrementViews({ questionId: id });
-	});
+  after(async () => {
+    await incrementViews({ questionId: id });
+  });
 
-	if (!success || !question) {
-		return redirect("/404");
-	}
+  if (!success || !question) {
+    return redirect("/404");
+  }
 
-	const {
-		success: areAnswersLoaded,
-		data: answersResult,
-		error: answerError,
-	} = await getAnswers({
-		questionId: id,
-		page: 1,
-		pageSize: 10,
-		filter: "latest",
-	});
-	const { author, content, createdAt, answers, views, tags, title } = question;
+  const {
+    success: areAnswersLoaded,
+    data: answersResult,
+    error: answerError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
 
-	return (
-		<>
-			<div className="flex-start w-full flex-col">
-				<div className="flex w-full flex-col-reverse justify-between">
-					<div className="flex items-center justify-start gap-1">
-						<UserAvatar
-							id={author._id}
-							name={author.name}
-							className="size-[22]"
-							fallbackClassName="text-[10px]"
-						/>
-						<Link href={ROUTES.PROFILE(author._id)}>
-							<p className="paragraph-semibold text-dark300_light700">
-								{author.name}
-							</p>
-						</Link>
-					</div>
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
+  });
 
-					<div className="flex justify-end ">
-						<Votes upvotes={question.upvotes} hasupVoted={true} downvotes={question.downvotes} hasdownVoted={false}/>
-					</div>
-				</div>
-				<h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
-					{title}
-				</h2>
-			</div>
+  const { author, content, createdAt, answers, views, tags, title } = question;
 
-			<div className="mb-8 mt-5 flex flex-wrap gap-4">
-				<Metric
-					imgUrl="/icons/clock.svg"
-					alt="clock icon"
-					value={` asked ${getTimeStamp(new Date(createdAt))}`}
-					title=""
-					textStyles="small-regular text-dash400_light700"
-				/>
-				<Metric
-					imgUrl="/icons/message.svg"
-					alt="message icon"
-					value={answers}
-					title=""
-					textStyles="small-regular text-dash400_light700"
-				/>
-				<Metric
-					imgUrl="/icons/eye.svg"
-					alt="eye icon"
-					value={formatNumber(views + 1)}
-					title=""
-					textStyles="small-regular text-dash400_light700"
-				/>
-			</div>
+  return (
+    <>
+      <div className="flex-start w-full flex-col">
+        <div className="flex w-full flex-col-reverse justify-between">
+          <div className="flex items-center justify-start gap-1">
+            <UserAvatar
+              id={author._id}
+              name={author.name}
+              className="size-[22]"
+              fallbackClassName="text-[10px]"
+            />
+            <Link href={ROUTES.PROFILE(author._id)}>
+              <p className="paragraph-semibold text-dark300_light700">
+                {author.name}
+              </p>
+            </Link>
+          </div>
 
-			<Preview content={content} />
+          <div className="flex justify-end ">
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetType="question"
+                targetId={question._id}
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
+          </div>
+        </div>
+        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
+          {title}
+        </h2>
+      </div>
 
-			<div className="mt-8 flex flex-wrap gap-2">
-				{tags.map((tag: Tag) => (
-					<TagCard
-						key={tag._id}
-						_id={tag._id as string}
-						name={tag.name}
-						compact
-					/>
-				))}
-			</div>
+      <div className="mb-8 mt-5 flex flex-wrap gap-4">
+        <Metric
+          imgUrl="/icons/clock.svg"
+          alt="clock icon"
+          value={` asked ${getTimeStamp(new Date(createdAt))}`}
+          title=""
+          textStyles="small-regular text-dash400_light700"
+        />
+        <Metric
+          imgUrl="/icons/message.svg"
+          alt="message icon"
+          value={answers}
+          title=""
+          textStyles="small-regular text-dash400_light700"
+        />
+        <Metric
+          imgUrl="/icons/eye.svg"
+          alt="eye icon"
+          value={formatNumber(views + 1)}
+          title=""
+          textStyles="small-regular text-dash400_light700"
+        />
+      </div>
 
-			<section className="my-5">
-				<AllAnswers
-					data={answersResult?.answers}
-					success={areAnswersLoaded}
-					error={answerError}
-					totalAnswers={answersResult?.totalAnswers || 0}
-				/>
-			</section>
+      <Preview content={content} />
 
-			<section className="my-5">
-				<AnswerForm
-					questionId={question._id}
-					questionTitle={question.title}
-					questionContent={question.content}
-				/>
-			</section>
-		</>
-	);
+      <div className="mt-8 flex flex-wrap gap-2">
+        {tags.map((tag: Tag) => (
+          <TagCard
+            key={tag._id}
+            _id={tag._id as string}
+            name={tag.name}
+            compact
+          />
+        ))}
+      </div>
+
+      <section className="my-5">
+        <AllAnswers
+          data={answersResult?.answers}
+          success={areAnswersLoaded}
+          error={answerError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
+      </section>
+
+      <section className="my-5">
+        <AnswerForm
+          questionId={question._id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
+      </section>
+    </>
+  );
 };
 
 export default QuestionDetails;
