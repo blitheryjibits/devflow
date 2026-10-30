@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState, use } from "react";
 import { toast } from "sonner";
+import createVote from "@/lib/actions/vote.action";
 
 interface Params {
   targetType: "question" | "answer";
