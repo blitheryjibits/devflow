@@ -1,11 +1,11 @@
-import { Schema, model, models, type Types, type Document } from "mongoose";
+import { type Document, model, models, Schema, type Types } from "mongoose";
 
 export interface IQuestion {
 	title: string;
 	content: string;
 	views: number;
-	upVotes: number;
-	downVotes: number;
+	upvotes: number;
+	downvotes: number;
 	answers: number;
 	tags: Types.ObjectId[];
 	author: Types.ObjectId;
@@ -18,8 +18,8 @@ const QuestionSchema = new Schema<IQuestion>(
 		title: { type: String, required: true },
 		content: { type: String, required: true },
 		views: { type: Number, default: 0 },
-		upVotes: { type: Number, default: 0 },
-		downVotes: { type: Number, default: 0 },
+		upvotes: { type: Number, default: 0 },
+		downvotes: { type: Number, default: 0 },
 		answers: { type: Number, default: 0 },
 		tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
 		author: { type: Schema.Types.ObjectId, ref: "User", required: true },
