@@ -26,8 +26,8 @@ export const Votes = ({
   const session = useSession();
   const userId = session?.data?.user?.id;
   console.log(`session in votes.tsx: ${session}`);
-  console.log(`session status in votes.tsx: ${session.status}`);
-  console.log(`session data in votes.tsx: ${session.data}`);
+  console.log(`session status in votes.tsx: ${session?.status}`);
+  console.log(`session data in votes.tsx: ${session?.data}`);
   console.log(`user id in votes.tsx: ${userId}`);
 
   const { success, data } = use(hasVotedPromise);
