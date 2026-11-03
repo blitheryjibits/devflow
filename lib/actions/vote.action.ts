@@ -92,7 +92,7 @@ export async function createVote(
 					{ new: true, session },
 				);
 				await updateVoteCount(
-					{ targetId, targetType, voteType: existingVote.type, change: -1 },
+					{ targetId, targetType, voteType: existingVote.voteType, change: -1 },
 					session,
 				);
 				await updateVoteCount(
