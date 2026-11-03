@@ -64,7 +64,7 @@ export async function createVote(
 	const { targetId, targetType, voteType } = validationResult.params!;
 	const userId = validationResult.session?.user?.id;
 
-	if (!userId) return handleError(new Error("Uauthorized")) as ErrorResponse;
+	if (!userId) return handleError(new Error("Unauthorized")) as ErrorResponse;
 
 	const session = await mongoose.startSession();
 	session.startTransaction();
