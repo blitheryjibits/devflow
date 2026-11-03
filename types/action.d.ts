@@ -50,7 +50,7 @@ interface GetAnswersParams extends PaginatedSearchParams {
 interface CreateVoteParams {
 	targetId: string;
 	targetType: "question" | "answer";
-	voteType: "upVote" | "downVote";
+	voteType: "upvote" | "downvote";
 }
 
 interface UpdateVoteCountParams extends CreateVoteParams {
