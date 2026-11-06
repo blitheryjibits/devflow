@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -13,14 +14,10 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { Votes } from "@/components/votes/Votes";
 import { hasVoted } from "@/lib/actions/vote.action";
-import { Suspense } from "react";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
-  console.log(
-    `data from question in questions/id: ${JSON.stringify(question, null, 2)}`,
-  );
   after(async () => {
     await incrementViews({ questionId: id });
   });
