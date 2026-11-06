@@ -50,6 +50,21 @@ export async function getUsers(
 
 	try {
 		const totalUsers = await User.countDocuments(filterQuery);
+
+		const users = await User.find(filterQuery)
+			.sort(sortCriteria)
+			.skip(skip)
+			.limit(limit);
+
+		const isNext = totalUsers > skip + users.length;
+
+		return {
+			success: true,
+			data: {
+				users: JSON.parse(JSON.stringify(users)),
+				isNext,
+			},
+		};
 	} catch (error) {
 		return handleError(error) as ErrorResponse;
 	}
