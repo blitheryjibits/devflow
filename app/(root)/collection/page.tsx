@@ -1,10 +1,11 @@
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import LocalSearch from "@/components/search/LocalSearch";
 import ROUTES from "@/constants/route";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
-import { redirect } from "next/navigation";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
