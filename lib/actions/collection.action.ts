@@ -139,7 +139,7 @@ export async function getSavedQuestions(
 					as: "question",
 				},
 			},
-			{ $unwind: "question" },
+			{ $unwind: "$question" },
 			{
 				$lookup: {
 					from: "users",
@@ -148,7 +148,7 @@ export async function getSavedQuestions(
 					as: "question.author",
 				},
 			},
-			{ $unwind: "question.author" },
+			{ $unwind: "$question.author" },
 			{
 				$lookup: {
 					from: "tags",
