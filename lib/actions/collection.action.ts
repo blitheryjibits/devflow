@@ -49,7 +49,7 @@ export async function toggleSaveQuestion(
 
 		await Collection.create({
 			question: questionId,
-			authorId: userId,
+			author: userId,
 		});
 
 		revalidatePath(ROUTES.QUESTION(questionId));
