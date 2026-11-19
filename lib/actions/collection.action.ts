@@ -119,9 +119,9 @@ export async function getSavedQuestions(
 	const sortOptions: Record<string, Record<string, 1 | -1>> = {
 		mostrecent: { "question.createdAt": -1 },
 		oldest: { "question.createdAt": 1 },
-		mostvoted: { "questions.upvotes": -1 },
-		mostviewed: { "questions.views": -1 },
-		mostanswered: { "questions.answers": -1 },
+		mostvoted: { "question.upvotes": -1 },
+		mostviewed: { "question.views": -1 },
+		mostanswered: { "question.answers": -1 },
 	};
 
 	const sortCriteria = sortOptions[filter as keyof typeof sortOptions] || {
@@ -164,7 +164,7 @@ export async function getSavedQuestions(
 				$match: {
 					$or: [
 						{ "question.title": { $regex: query, $options: "i" } },
-						{ "question.content": { $regex: query, options: "i" } },
+						{ "question.content": { $regex: query, $options: "i" } },
 					],
 				},
 			});
@@ -176,7 +176,7 @@ export async function getSavedQuestions(
 		]);
 
 		pipeline.push({ $sort: sortCriteria }, { $skip: skip }, { $limit: limit });
-		pipeline.push({ $project: { $question: 1, author: 1 } });
+		pipeline.push({ $project: { question: 1, author: 1 } });
 
 		const questions = await Collection.aggregate(pipeline);
 		const isNext = totalCount.count > skip + questions.length;
