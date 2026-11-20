@@ -16,9 +16,12 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { hasSavedQuestion } from "@/lib/actions/collection.action";
+import { CommonFilter } from "@/components/filters/CommonFilter";
+import { AnswerFilters } from "@/constants/filters";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
+  const { page, pageSize, filter } = await searchParams;
   const { success, data: question } = await getQuestion({ questionId: id });
   after(async () => {
     await incrementViews({ questionId: id });
@@ -34,9 +37,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     error: answerError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter,
   });
 
   const hasVotedPromise = hasVoted({
@@ -135,6 +138,11 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           success={areAnswersLoaded}
           error={answerError}
           totalAnswers={answersResult?.totalAnswers || 0}
+        />
+        <CommonFilter
+          filters={AnswerFilters}
+          otherClasses="sm:min-w-32"
+          containerClasses="max-sm:w-full"
         />
       </section>
 
