@@ -3,11 +3,12 @@ import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import LocalSearch from "@/components/search/LocalSearch";
-import ROUTES from "@/constants/route";
 import { EMPTY_QUESTION } from "@/constants/states";
+import ROUTES from "@/constants/route";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
-import { CommonFilter } from "@/components/filters/CommonFilter";
+import { Pagination } from "@/components/Pagination";
 import { CollectionFilters } from "@/constants/filters";
+import { CommonFilter } from "@/components/filters/CommonFilters";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -29,7 +30,7 @@ const Collection = async ({ searchParams }: SearchParams) => {
     redirect(ROUTES.SIGN_IN);
   }
 
-  const { collection } = data || {};
+  const { collection, isNext } = data || {};
 
   return (
     <>
@@ -60,6 +61,8 @@ const Collection = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} containerClasses="" />
     </>
   );
 };

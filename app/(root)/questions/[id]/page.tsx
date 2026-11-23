@@ -16,7 +16,7 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import { hasSavedQuestion } from "@/lib/actions/collection.action";
-import { CommonFilter } from "@/components/filters/CommonFilter";
+import { CommonFilter } from "@/components/filters/CommonFilters";
 import { AnswerFilters } from "@/constants/filters";
 
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
@@ -138,6 +138,8 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           success={areAnswersLoaded}
           error={answerError}
           totalAnswers={answersResult?.totalAnswers || 0}
+          page={Number(page) || 1}
+          isNext={answersResult?.isNext || false}
         />
         <CommonFilter
           filters={AnswerFilters}
