@@ -21,8 +21,6 @@ interface Props {
   containerClasses?: string;
 }
 
-export const test = "hello";
-
 export const CommonFilter = ({
   filters,
   otherClasses = "",
