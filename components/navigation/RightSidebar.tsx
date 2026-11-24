@@ -2,20 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import ROUTES from "@/constants/route";
 import { getHotQuestions } from "@/lib/actions/question.action";
+import { getTopTags } from "@/lib/actions/tag.action";
 import TagCard from "../cards/TagCard";
 import DataRenderer from "../DataRenderer";
 
 const RightSidebar = async () => {
   const { success, data: hotQuestions, error } = await getHotQuestions();
-
-  const popTags = [
-    { _id: "1", name: "react", questions: 100 },
-    { _id: "2", name: "javascript", questions: 500 },
-    { _id: "3", name: "typescript", questions: 700 },
-    { _id: "4", name: "postgresql", questions: 300 },
-    { _id: "5", name: "mongodb", questions: 1000 },
-    { _id: "6", name: "react-query", questions: 1000 },
-  ];
+  const {
+    success: tagSuccess,
+    data: tags,
+    error: tagError,
+  } = await getTopTags();
 
   return (
     <section className="custom-scrollbar background-light900_dark200 light-border shadow-light-300 sticky top-0 right-0 flex h-screen w-87.5 flex-col gap-6 overflow-y-auto border-l p-6 pt-36 max-lg:hidden dark:shadow-none">
@@ -55,21 +52,32 @@ const RightSidebar = async () => {
         </div>
       </div>
 
-      {/*<div className="mt-16">
+      <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-        <div className="mt-7 flex flex-col gap-4">
-          {popTags.map(({ _id, name, questions }) => (
-            <TagCard
-              key={_id}
-              _id={_id}
-              name={name}
-              questions={questions}
-              showCount
-              compact
-            />
-          ))}
-        </div>
-      </div>*/}
+        <DataRenderer
+          data={tags}
+          empty={{
+            title: "No tags found",
+            message: "No tags have been used yet",
+          }}
+          success={tagSuccess}
+          error={tagError}
+          render={(tags) => (
+            <div className="mt-7 flex flex-col gap-4">
+              {tags.map(({ _id, name, questions }) => (
+                <TagCard
+                  key={_id}
+                  _id={_id}
+                  name={name}
+                  questions={questions}
+                  showCount
+                  compact
+                />
+              ))}
+            </div>
+          )}
+        />
+      </div>
     </section>
   );
 };
